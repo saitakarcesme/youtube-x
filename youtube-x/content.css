@@ -1,0 +1,890 @@
+/* YouTube X — X'in düzeni, YouTube'un renkleri. Tüm kurallar html.xt-on altında. */
+
+:root {
+  --xt-bg: #0f0f0f;
+  --xt-bg-a: rgba(15, 15, 15, 0.82);
+  --xt-text: #f1f1f1;
+  --xt-muted: #aaaaaa;
+  --xt-faint: #717171;
+  --xt-border: #272727;
+  --xt-surface: #181818;
+  --xt-elev: #272727;
+  --xt-hover: rgba(255, 255, 255, 0.1);
+  --xt-soft: rgba(255, 255, 255, 0.04);
+  --xt-red: #ff0033;
+  --xt-red-h: #e0002d;
+  --xt-red-soft: rgba(255, 0, 51, 0.12);
+  --xt-link: #3ea6ff;
+  --xt-link-soft: rgba(62, 166, 255, 0.12);
+  --xt-green: #2ba640;
+  --xt-green-soft: rgba(43, 166, 64, 0.14);
+  --xt-white: #f1f1f1;
+  --xt-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --xt-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  --xt-nav: 275px;
+  --xt-main: 600px;
+  --xt-right: 350px;
+  --xt-gap: 30px;
+  --xt-head-h: 53px;
+  --xt-shell: calc(var(--xt-nav) + var(--xt-main) + var(--xt-gap) + var(--xt-right));
+  --xt-off: max(0px, calc((100vw - var(--xt-shell)) / 2));
+  --xt-colw: var(--xt-main);
+}
+html[xt-mode="wide"] { --xt-colw: min(1440px, calc(100vw - var(--xt-off) - var(--xt-nav) - 16px)); }
+/* İzleme ve Shorts: menü daralır, video alanı büyür */
+html[xt-page="watch"],
+html[xt-page="shorts"] {
+  --xt-nav: 88px;
+  --xt-off: max(0px, calc((100vw - 1880px) / 2));
+  --xt-colw: calc(100vw - var(--xt-off) * 2 - var(--xt-nav));
+}
+@media (max-width: 1264px) { :root { --xt-nav: 88px; } }
+@media (max-width: 1079px) { :root { --xt-right: 0px; --xt-gap: 0px; } }
+@media (max-width: 700px) {
+  :root,
+  html[xt-page="watch"],
+  html[xt-page="shorts"] { --xt-nav: 68px; --xt-main: calc(100vw - 68px); }
+}
+
+/* Kapalıyken hiçbir şey görünmez */
+#xt-nav, #xt-head, #xt-right, #xt-flow, #xt-menu, #xt-toast, .xt-post { display: none; }
+
+/* ============================================================ tema */
+/* YouTube'un koyu tema değişkenleri (sayfa açık temada açılsa bile eksiksiz olsun) */
+html.xt-on.xt-on {
+  --yt-spec-base-background: #0f0f0f;
+  --yt-spec-raised-background: #212121;
+  --yt-spec-menu-background: #282828;
+  --yt-spec-inverted-background: #f1f1f1;
+  --yt-spec-additive-background: rgba(255, 255, 255, 0.05);
+  --yt-spec-outline: rgba(255, 255, 255, 0.2);
+  --yt-spec-shadow: rgba(0, 0, 0, 0.25);
+  --yt-spec-text-primary: #f1f1f1;
+  --yt-spec-text-secondary: #aaaaaa;
+  --yt-spec-text-disabled: #717171;
+  --yt-spec-text-primary-inverse: #0f0f0f;
+  --yt-spec-call-to-action: #3ea6ff;
+  --yt-spec-call-to-action-inverse: #065fd4;
+  --yt-spec-themed-blue: #3ea6ff;
+  --yt-spec-brand-link-text: #3ea6ff;
+  --yt-spec-icon-active-other: #f1f1f1;
+  --yt-spec-icon-inactive: #909090;
+  --yt-spec-icon-disabled: #717171;
+  --yt-spec-badge-chip-background: rgba(255, 255, 255, 0.1);
+  --yt-spec-button-chip-background-hover: rgba(255, 255, 255, 0.2);
+  --yt-spec-mono-filled-hover: #d9d9d9;
+  --yt-spec-mono-tonal-hover: rgba(255, 255, 255, 0.2);
+  --yt-spec-touch-response: #fff;
+  --yt-spec-touch-response-inverse: #000;
+  --yt-spec-10-percent-layer: rgba(255, 255, 255, 0.1);
+  --yt-spec-snackbar-background: #f1f1f1;
+  --yt-spec-general-background-a: #0f0f0f;
+  --yt-spec-general-background-b: #0f0f0f;
+  --yt-spec-general-background-c: #0f0f0f;
+  --yt-spec-brand-background-solid: #212121;
+  --yt-spec-brand-background-primary: rgba(33, 33, 33, 0.98);
+  --yt-spec-brand-background-secondary: rgba(33, 33, 33, 0.95);
+  --yt-spec-wordmark-text: #fff;
+  --yt-spec-filled-button-text: #0f0f0f;
+  --yt-spec-brand-icon-active: #ff0033;
+  --yt-spec-brand-button-background: #cc0000;
+  color-scheme: dark;
+}
+/* Beyaz (mono dolu) düğmeler ve seçili çipler: yazı her zaman koyu */
+html.xt-on :is(button, a).yt-spec-button-shape-next--filled.yt-spec-button-shape-next--mono,
+html.xt-on :is(button, a).ytSpecButtonShapeNextFilled.ytSpecButtonShapeNextMono { background: #f1f1f1 !important; color: #0f0f0f !important; }
+html.xt-on :is(button, a).yt-spec-button-shape-next--filled.yt-spec-button-shape-next--mono:hover,
+html.xt-on :is(button, a).ytSpecButtonShapeNextFilled.ytSpecButtonShapeNextMono:hover { background: #d9d9d9 !important; }
+html.xt-on :is(.yt-spec-button-shape-next--filled.yt-spec-button-shape-next--mono, .ytSpecButtonShapeNextFilled.ytSpecButtonShapeNextMono) :is(div, span, yt-icon, .yt-core-attributed-string) { color: inherit !important; }
+html.xt-on yt-chip-cloud-chip-renderer[selected] #chip-container,
+html.xt-on yt-chip-cloud-chip-renderer.iron-selected #chip-container,
+html.xt-on yt-chip-cloud-chip-renderer[selected] chip-shape > :is(button, div),
+html.xt-on yt-chip-cloud-chip-renderer.iron-selected chip-shape > :is(button, div),
+html.xt-on .ytChipShapeActive { background: #f1f1f1 !important; color: #0f0f0f !important; }
+html.xt-on :is(yt-chip-cloud-chip-renderer[selected], yt-chip-cloud-chip-renderer.iron-selected, .ytChipShapeActive) :is(div, span, yt-formatted-string) { color: #0f0f0f !important; }
+
+html.xt-on { --ytd-masthead-height: 0px !important; scrollbar-color: #3f3f3f var(--xt-bg); scrollbar-width: thin; }
+html.xt-on ytd-app { --ytd-masthead-height: 0px !important; }
+html.xt-on,
+html.xt-on body,
+html.xt-on ytd-app { background: var(--xt-bg) !important; }
+html.xt-on body { color: var(--xt-text); }
+html.xt-on ytd-app,
+html.xt-on ytd-app *:not(.ytp-caption-segment),
+html.xt-on ytd-popup-container * { font-family: var(--xt-font) !important; }
+
+/* YouTube üst çubuğu ve rehberi -> X menüsü */
+html.xt-on #masthead-container,
+html.xt-on ytd-masthead,
+html.xt-on tp-yt-app-drawer#guide,
+html.xt-on ytd-mini-guide-renderer,
+html.xt-on #frosted-glass { display: none !important; }
+
+/* Sayfa geçiş çubuğu: ince YouTube kırmızısı */
+html.xt-on yt-page-navigation-progress { z-index: 2100 !important; height: 2px !important; }
+html.xt-on yt-page-navigation-progress #progress { background: var(--xt-red) !important; }
+
+/* ============================================================ reklam / promosyon / gereksizler */
+html.xt-on #masthead-ad,
+html.xt-on #player-ads,
+html.xt-on ytd-ad-slot-renderer,
+html.xt-on ad-slot-renderer,
+html.xt-on ytd-in-feed-ad-layout-renderer,
+html.xt-on ytd-display-ad-renderer,
+html.xt-on ytd-promoted-video-renderer,
+html.xt-on ytd-compact-promoted-video-renderer,
+html.xt-on ytd-promoted-sparkles-web-renderer,
+html.xt-on ytd-promoted-sparkles-text-search-renderer,
+html.xt-on ytd-search-pyv-renderer,
+html.xt-on ytd-companion-slot-renderer,
+html.xt-on ytd-action-companion-ad-renderer,
+html.xt-on ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-ads"],
+html.xt-on ytd-rich-item-renderer:has(ytd-ad-slot-renderer),
+html.xt-on ytd-rich-item-renderer:has(ad-slot-renderer),
+html.xt-on ytd-banner-promo-renderer,
+html.xt-on ytd-statement-banner-renderer,
+html.xt-on ytd-primetime-promo-renderer,
+html.xt-on ytd-mealbar-promo-renderer,
+html.xt-on yt-mealbar-promo-renderer,
+html.xt-on tp-yt-paper-dialog:has(> ytd-mealbar-promo-renderer),
+html.xt-on ytd-brand-video-singleton-renderer,
+html.xt-on ytd-brand-video-shelf-renderer,
+html.xt-on ytd-merch-shelf-renderer,
+html.xt-on ytd-ticket-shelf-renderer,
+html.xt-on ytd-feed-nudge-renderer,
+html.xt-on ytd-watch-flexy #donation-shelf,
+html.xt-on ytd-watch-flexy #shopping-timely-shelf,
+html.xt-on ytd-watch-flexy #sponsor-button,
+html.xt-on ytd-watch-flexy #cinematics,
+html.xt-on ytd-watch-flexy #cinematics-container,
+html.xt-on .ytp-paid-content-overlay,
+html.xt-on .ytp-suggested-action,
+html.xt-on ytd-rich-section-renderer,
+html.xt-on ytd-reel-shelf-renderer,
+html.xt-on grid-shelf-view-model,
+html.xt-on ytd-horizontal-card-list-renderer,
+html.xt-on [xt-skip],
+html.xt-on [xt-hide] { display: none !important; }
+
+/* ============================================================ ana sütun */
+html.xt-on ytd-page-manager#page-manager,
+html.xt-on #xt-flow {
+  margin-left: calc(var(--xt-off) + var(--xt-nav)) !important;
+  margin-top: 0 !important;
+  width: var(--xt-colw) !important;
+  max-width: var(--xt-colw) !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+html.xt-on #xt-flow { display: block; padding-top: var(--xt-head-h); }
+html.xt-on[xt-page="shorts"] #xt-flow { padding-top: 0; }
+html.xt-on[xt-mode="narrow"] ytd-page-manager#page-manager,
+html.xt-on[xt-mode="narrow"] #xt-flow { border-left: 1px solid var(--xt-border); border-right: 1px solid var(--xt-border); }
+html.xt-on[xt-mode="narrow"] ytd-page-manager#page-manager { min-height: calc(100vh - var(--xt-head-h)); }
+
+/* Tam ekran: kabuk tamamen çekilir */
+html.xt-on[xt-fs] #xt-nav,
+html.xt-on[xt-fs] #xt-head,
+html.xt-on[xt-fs] #xt-right,
+html.xt-on[xt-fs] #xt-flow { display: none !important; }
+html.xt-on[xt-fs] ytd-page-manager#page-manager { margin: 0 !important; width: 100% !important; max-width: 100% !important; border: 0 !important; }
+
+/* ============================================================ sol menü */
+html.xt-on #xt-nav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: var(--xt-off);
+  width: var(--xt-nav);
+  box-sizing: border-box;
+  padding: 0 12px 0 8px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2010;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  background: var(--xt-bg);
+  font-family: var(--xt-font);
+  transition: left 0.25s var(--xt-ease), width 0.25s var(--xt-ease);
+}
+#xt-nav .xt-logo {
+  width: 52px;
+  height: 52px;
+  margin-top: 2px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+#xt-nav .xt-logo:hover { background: var(--xt-hover); }
+#xt-nav .xt-logo .xt-ic { width: 34px; height: 34px; }
+#xt-nav .xt-nav-list { display: flex; flex-direction: column; margin: 2px 0 4px; }
+#xt-nav .xt-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px;
+  margin: 2px 0;
+  border-radius: 9999px;
+  color: var(--xt-text);
+  text-decoration: none;
+  font: 400 20px/24px var(--xt-font);
+  width: fit-content;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+#xt-nav .xt-nav-item:hover { background: var(--xt-hover); }
+#xt-nav .xt-nav-item .xt-ic { width: 26px; height: 26px; stroke-width: 1.8; flex: none; transition: color 0.2s; }
+#xt-nav .xt-nav-item.on { font-weight: 700; }
+#xt-nav .xt-nav-item.on .xt-ic { stroke-width: 2.6; color: var(--xt-red); }
+#xt-nav .xt-post-btn { width: 90%; height: 52px; font-size: 17px; margin: 12px 0; flex: none; }
+#xt-nav .xt-post-btn .xt-ic { display: none; width: 24px; height: 24px; stroke-width: 2.4; }
+#xt-nav .xt-account {
+  margin: auto 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 9999px;
+  color: var(--xt-text);
+  cursor: pointer;
+  min-width: 0;
+  transition: background 0.2s;
+}
+#xt-nav .xt-account:hover { background: var(--xt-hover); }
+#xt-nav .xt-account-text { flex: 1; min-width: 0; line-height: 20px; font-size: 15px; }
+#xt-nav .xt-account-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#xt-nav .xt-account-handle { color: var(--xt-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#xt-nav .xt-account-dots { width: 18px; height: 18px; flex: none; }
+#xt-nav .xt-signin { width: 100%; height: 44px; gap: 8px; }
+#xt-nav .xt-signin .xt-ic { display: none; width: 24px; height: 24px; }
+#xt-nav .xt-account:has(.xt-signin) { padding: 0; background: none !important; }
+
+/* Daraltılmış menü: dar ekranlar + izleme/Shorts */
+@media (max-width: 1264px) {
+  html.xt-on #xt-nav { align-items: center; padding: 0 4px; }
+  #xt-nav .xt-label, #xt-nav .xt-post-btn span, #xt-nav .xt-account-text, #xt-nav .xt-account-dots { display: none; }
+  #xt-nav .xt-post-btn { width: 52px; padding: 0; }
+  #xt-nav .xt-post-btn .xt-ic { display: block; }
+  #xt-nav .xt-account { padding: 8px; }
+  #xt-nav .xt-signin { width: 52px; height: 52px; padding: 0; }
+  #xt-nav .xt-signin span { display: none; }
+  #xt-nav .xt-signin .xt-ic { display: block; }
+}
+html.xt-on[xt-page="watch"] #xt-nav,
+html.xt-on[xt-page="shorts"] #xt-nav { align-items: center; padding: 0 4px; }
+html.xt-on[xt-page="watch"] #xt-nav :is(.xt-label, .xt-post-btn span, .xt-account-text, .xt-account-dots),
+html.xt-on[xt-page="shorts"] #xt-nav :is(.xt-label, .xt-post-btn span, .xt-account-text, .xt-account-dots) { display: none; }
+html.xt-on[xt-page="watch"] #xt-nav .xt-post-btn,
+html.xt-on[xt-page="shorts"] #xt-nav .xt-post-btn { width: 52px; padding: 0; }
+html.xt-on[xt-page="watch"] #xt-nav .xt-post-btn .xt-ic,
+html.xt-on[xt-page="shorts"] #xt-nav .xt-post-btn .xt-ic { display: block; }
+html.xt-on[xt-page="watch"] #xt-nav .xt-account,
+html.xt-on[xt-page="shorts"] #xt-nav .xt-account { padding: 8px; }
+html.xt-on:is([xt-page="watch"], [xt-page="shorts"]) #xt-nav .xt-signin { width: 52px; height: 52px; padding: 0; }
+html.xt-on:is([xt-page="watch"], [xt-page="shorts"]) #xt-nav .xt-signin span { display: none; }
+html.xt-on:is([xt-page="watch"], [xt-page="shorts"]) #xt-nav .xt-signin .xt-ic { display: block; }
+
+/* ============================================================ üst başlık */
+html.xt-on #xt-head {
+  position: fixed;
+  top: 0;
+  left: calc(var(--xt-off) + var(--xt-nav));
+  width: var(--xt-colw);
+  height: var(--xt-head-h);
+  box-sizing: border-box;
+  z-index: 2005;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--xt-bg-a);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid var(--xt-border);
+  font-family: var(--xt-font);
+  color: var(--xt-text);
+  padding: 0 16px;
+}
+html.xt-on[xt-mode="narrow"] #xt-head { border-left: 1px solid var(--xt-border); border-right: 1px solid var(--xt-border); }
+html.xt-on[xt-page="shorts"] #xt-head { display: none; }
+html.xt-on[xt-page="home"] #xt-head,
+html.xt-on[xt-page="subs"] #xt-head { padding: 0; }
+#xt-head .xt-tabs { display: flex; width: 100%; height: 100%; }
+#xt-head .xt-tab {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  color: var(--xt-muted);
+  font: 500 15px/20px var(--xt-font);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+#xt-head .xt-tab:hover { background: var(--xt-hover); }
+#xt-head .xt-tab span { position: relative; display: flex; align-items: center; height: 100%; }
+#xt-head .xt-tab.on { color: var(--xt-text); font-weight: 700; }
+#xt-head .xt-tab.on span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--xt-red);
+}
+#xt-head .xt-back {
+  width: 36px;
+  height: 36px;
+  margin: 0 16px 0 -8px;
+  border-radius: 50%;
+  border: 0;
+  background: none;
+  color: var(--xt-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+  transition: background 0.2s;
+}
+#xt-head .xt-back:hover { background: var(--xt-hover); }
+#xt-head .xt-back .xt-ic { width: 20px; height: 20px; stroke-width: 2.2; }
+#xt-head .xt-head-text { min-width: 0; }
+#xt-head .xt-head-title { font-size: 20px; line-height: 24px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#xt-head .xt-head-sub { font-size: 13px; line-height: 16px; color: var(--xt-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#xt-head .xt-search { flex: 1; height: 40px; }
+
+/* ============================================================ ortak parçalar */
+.xt-ic { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.xt-ic.xt-fill { fill: currentColor; stroke: none; }
+.xt-btn {
+  border: 0;
+  border-radius: 9999px;
+  font: 700 15px/20px var(--xt-font);
+  padding: 0 16px;
+  height: 36px;
+  min-width: 36px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, opacity 0.2s, transform 0.1s;
+}
+.xt-btn:active { transform: scale(0.97); }
+.xt-btn-primary { background: var(--xt-white); color: #0f0f0f; }
+.xt-btn-primary:hover { background: #d9d9d9; }
+.xt-btn-primary:disabled { opacity: 0.5; cursor: default; background: var(--xt-white); transform: none; }
+.xt-btn-red { background: var(--xt-red); color: #fff; }
+.xt-btn-red:hover { background: var(--xt-red-h); }
+.xt-btn-sm { height: 32px; font-size: 14px; padding: 0 14px; }
+.xt-avatar { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: var(--xt-elev); }
+.xt-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.xt-letter { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; font: 600 17px var(--xt-font); color: #fff; }
+.xt-verified { width: 16px; height: 16px; flex: none; margin-left: 3px; color: var(--xt-muted); }
+
+html.xt-on .xt-search {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 42px;
+  padding: 0 16px 0 12px;
+  border-radius: 9999px;
+  border: 1px solid #303030;
+  background: #121212;
+  color: var(--xt-muted);
+  cursor: text;
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s;
+}
+.xt-on .xt-search:focus-within { border-color: var(--xt-link); background: var(--xt-bg); color: var(--xt-link); }
+.xt-on .xt-search .xt-ic { width: 18px; height: 18px; margin: 0 8px 0 4px; stroke-width: 2.2; flex: none; }
+.xt-on .xt-search input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--xt-text); font: 15px var(--xt-font); }
+.xt-on .xt-search input::placeholder { color: var(--xt-muted); }
+
+/* ============================================================ yazma kutusu */
+html.xt-on .xt-compose { display: flex; gap: 12px; padding: 12px 16px 8px; border-bottom: 1px solid var(--xt-border); font-family: var(--xt-font); }
+.xt-compose-main { flex: 1; min-width: 0; }
+.xt-compose-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: 0;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  color: var(--xt-text);
+  font: 20px/24px var(--xt-font);
+  padding: 8px 0 12px;
+}
+.xt-compose-input::placeholder { color: var(--xt-faint); }
+.xt-compose-bar { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--xt-border); padding-top: 8px; }
+.xt-compose-tools { display: flex; margin-left: -8px; }
+.xt-tool { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--xt-red); transition: background 0.2s; }
+.xt-tool:hover { background: var(--xt-red-soft); }
+.xt-tool .xt-ic { width: 20px; height: 20px; }
+
+/* Boş akış */
+html.xt-on .xt-empty-state { display: block; padding: 40px 32px; text-align: center; font-family: var(--xt-font); color: var(--xt-text); }
+.xt-empty-state .xt-ic { width: 56px; height: 56px; color: var(--xt-red); }
+.xt-empty-state h2 { font: 800 28px/34px var(--xt-font); margin: 12px 0 8px; }
+.xt-empty-state p { color: var(--xt-muted); font-size: 15px; line-height: 20px; margin: 0 auto 20px; max-width: 380px; }
+.xt-empty-state .xt-btn { height: 44px; font-size: 16px; padding: 0 24px; }
+
+/* ============================================================ akış: tek sütun */
+html.xt-on ytd-rich-grid-renderer {
+  --ytd-rich-grid-items-per-row: 1 !important;
+  --ytd-rich-grid-posts-per-row: 1 !important;
+  --ytd-rich-grid-slim-items-per-row: 1 !important;
+  --ytd-rich-grid-game-cards-per-row: 1 !important;
+  --ytd-rich-grid-gutter-margin: 0px !important;
+  --ytd-rich-grid-item-margin: 0px !important;
+  --ytd-rich-grid-content-offset-top: 0px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+html.xt-on ytd-rich-grid-renderer > #contents { display: block !important; padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: none !important; }
+html.xt-on ytd-rich-grid-row,
+html.xt-on ytd-rich-grid-row > #contents { display: contents !important; }
+
+html.xt-on[xt-mode="narrow"] ytd-browse,
+html.xt-on[xt-mode="narrow"] ytd-two-column-browse-results-renderer,
+html.xt-on[xt-mode="narrow"] ytd-two-column-browse-results-renderer > #primary,
+html.xt-on[xt-mode="narrow"] ytd-browse ytd-section-list-renderer,
+html.xt-on ytd-search,
+html.xt-on ytd-search #container.ytd-search,
+html.xt-on ytd-two-column-search-results-renderer,
+html.xt-on ytd-two-column-search-results-renderer > #primary {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+html.xt-on ytd-search #container.ytd-search { padding-top: 0 !important; }
+html.xt-on ytd-two-column-search-results-renderer > #secondary { display: none !important; }
+html.xt-on ytd-search ytd-item-section-renderer > #contents,
+html.xt-on ytd-search ytd-section-list-renderer > #contents { margin: 0 !important; padding: 0 !important; }
+html.xt-on ytd-search-header-renderer,
+html.xt-on ytd-search ytd-search-sub-menu-renderer { padding: 8px 16px !important; margin: 0 !important; border-bottom: 1px solid var(--xt-border); box-sizing: border-box; }
+html.xt-on ytd-search ytd-shelf-renderer #title-container { padding: 12px 16px 4px !important; margin: 0 !important; }
+html.xt-on ytd-search ytd-shelf-renderer { margin: 0 !important; border-bottom: 1px solid var(--xt-border); }
+html.xt-on ytd-search ytd-universal-watch-card-renderer,
+html.xt-on ytd-search ytd-channel-renderer,
+html.xt-on ytd-search ytd-secondary-search-container-renderer { margin: 12px 16px !important; display: block; }
+html.xt-on ytd-search ytd-channel-renderer { padding: 4px 0; }
+
+html.xt-on ytd-rich-grid-renderer > #header,
+html.xt-on ytd-browse ytd-feed-filter-chip-bar-renderer { padding: 12px 16px !important; margin: 0 !important; box-sizing: border-box; border-bottom: 1px solid var(--xt-border); }
+html.xt-on ytd-rich-grid-renderer > #header:empty { display: none !important; }
+html.xt-on ytd-browse[page-subtype="home"] #header,
+html.xt-on ytd-browse[page-subtype="home"] ytd-feed-filter-chip-bar-renderer,
+html.xt-on ytd-browse[page-subtype="home"] #chips-wrapper { display: none !important; }
+
+/* İşlenmeyi bekleyen öğe kısa süre görünmez (titreme olmasın), sonra her ihtimale karşı görünür */
+@keyframes xt-reveal { to { opacity: 1; } }
+html.xt-on[xt-mode="narrow"] :is(ytd-rich-item-renderer, ytd-search ytd-video-renderer):not([xt-done]):not([xt-skip]),
+html.xt-on ytd-watch-flexy #related ytd-item-section-renderer > #contents > yt-lockup-view-model:not([xt-done]) {
+  opacity: 0;
+  animation: xt-reveal 0s linear 2.5s forwards;
+}
+
+/* Kart yapılmış öğe: orijinal görünmez ama yerinde kalır (lazy-load ve menüler çalışsın) */
+html.xt-on [xt-done] {
+  position: relative !important;
+  display: block !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+html.xt-on [xt-done] > :not(.xt-post) {
+  position: absolute !important;
+  inset: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+}
+
+/* ============================================================ gönderi kartı */
+@keyframes xt-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+html.xt-on .xt-post {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  padding: 12px 16px 6px;
+  border-bottom: 1px solid var(--xt-border);
+  cursor: pointer;
+  font: 400 15px/20px var(--xt-font);
+  color: var(--xt-text);
+  text-align: left;
+  transition: background 0.2s;
+  -webkit-font-smoothing: antialiased;
+}
+html.xt-on .xt-post.xt-enter { animation: xt-in 0.32s var(--xt-ease) both; }
+html.xt-on .xt-post:hover { background: var(--xt-soft); }
+.xt-post a { color: inherit; text-decoration: none; }
+.xt-post .xt-avatar-link { flex: none; height: 40px; border-radius: 50%; transition: filter 0.2s; }
+.xt-post .xt-avatar-link:hover { filter: brightness(0.85); }
+.xt-post .xt-body { flex: 1; min-width: 0; }
+.xt-post .xt-line { display: flex; align-items: center; gap: 4px; min-width: 0; white-space: nowrap; height: 20px; }
+.xt-post .xt-name { display: inline-flex; align-items: center; min-width: 0; font-weight: 700; flex-shrink: 1; }
+.xt-post .xt-name-text { overflow: hidden; text-overflow: ellipsis; }
+.xt-post .xt-name:hover .xt-name-text { text-decoration: underline; }
+.xt-post .xt-handle { color: var(--xt-muted); overflow: hidden; text-overflow: ellipsis; min-width: 0; flex-shrink: 2; }
+.xt-post .xt-dot, .xt-post .xt-time { color: var(--xt-muted); flex: none; }
+.xt-post .xt-time:hover { text-decoration: underline; }
+.xt-post .xt-more {
+  margin: 0 -8px 0 auto;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  border: 0;
+  background: none;
+  color: var(--xt-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+.xt-post .xt-more:hover { color: var(--xt-text); background: var(--xt-hover); }
+.xt-post .xt-more .xt-ic { width: 18px; height: 18px; }
+.xt-post .xt-text { margin-top: 2px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.xt-post .xt-tag { color: var(--xt-link); }
+.xt-post .xt-tag:hover { text-decoration: underline; }
+
+.xt-post .xt-media {
+  position: relative;
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--xt-surface);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.xt-post.xt-short .xt-media { aspect-ratio: 9 / 16; width: min(100%, 290px); }
+.xt-post .xt-media img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.3s, transform 0.4s var(--xt-ease); }
+.xt-post .xt-media img.ld { opacity: 1; }
+.xt-post:hover .xt-media img.ld { transform: scale(1.015); }
+/* YouTube'un klasik oynat düğmesi */
+.xt-post .xt-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 68px;
+  height: 48px;
+  transform: translate(-50%, -50%);
+  color: rgba(33, 33, 33, 0.82);
+  transition: color 0.15s, transform 0.2s var(--xt-ease);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+}
+.xt-post:hover .xt-play { color: var(--xt-red); transform: translate(-50%, -50%) scale(1.05); }
+.xt-post .xt-play .xt-ic { width: 100%; height: 100%; }
+.xt-post .xt-dur,
+.xt-post .xt-live {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font: 600 12px/18px var(--xt-font);
+}
+.xt-post .xt-live { background: var(--xt-red); font-weight: 700; letter-spacing: 0.02em; }
+.xt-post .xt-progress { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--xt-red); }
+.xt-post .xt-progress-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255, 255, 255, 0.35); }
+
+.xt-post .xt-actions { display: flex; justify-content: space-between; max-width: 425px; margin: 4px 0 0 -8px; color: var(--xt-muted); }
+.xt-post .xt-act {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font: 400 13px/16px var(--xt-font);
+  cursor: pointer;
+  min-width: 34px;
+  transition: color 0.2s;
+}
+.xt-post .xt-ic-wrap { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.xt-post .xt-act .xt-ic { width: 18.75px; height: 18.75px; stroke-width: 1.8; }
+.xt-post .xt-count { padding: 0 12px 0 1px; }
+.xt-post .xt-count:empty { display: none; }
+.xt-post .xt-act:is([data-act="reply"], [data-act="views"], [data-act="share"]):hover { color: var(--xt-link); }
+.xt-post .xt-act:is([data-act="reply"], [data-act="views"], [data-act="share"]):hover .xt-ic-wrap { background: var(--xt-link-soft); }
+.xt-post .xt-act[data-act="repost"]:hover,
+.xt-post .xt-act[data-act="repost"].on { color: var(--xt-green); }
+.xt-post .xt-act[data-act="repost"]:hover .xt-ic-wrap { background: var(--xt-green-soft); }
+.xt-post .xt-act[data-act="like"]:hover,
+.xt-post .xt-act[data-act="like"].on { color: var(--xt-red); }
+.xt-post .xt-act[data-act="like"]:hover .xt-ic-wrap { background: var(--xt-red-soft); }
+.xt-post .xt-act[data-act="like"].on .xt-ic { fill: currentColor; }
+.xt-post .xt-act.pop .xt-ic { animation: xt-pop 0.35s ease; }
+@keyframes xt-pop { 0% { transform: scale(1); } 45% { transform: scale(1.4); } 100% { transform: scale(1); } }
+
+/* Devam yükleniyor */
+html.xt-on ytd-continuation-item-renderer { padding: 16px 0 !important; }
+html.xt-on ytd-continuation-item-renderer tp-yt-paper-spinner { --paper-spinner-color: var(--xt-red) !important; }
+
+/* ============================================================ izleme sayfası: önerilen (kompakt kart) */
+html.xt-on .xt-post.xt-compact {
+  gap: 10px;
+  padding: 8px;
+  margin: 0 8px;
+  border: 0;
+  border-radius: 12px;
+}
+.xt-post.xt-compact .xt-media { flex: 0 0 168px; width: 168px; margin: 0; border-radius: 8px; box-shadow: none; }
+.xt-post.xt-compact .xt-play { display: none; }
+.xt-post.xt-compact .xt-dur, .xt-post.xt-compact .xt-live { right: 4px; bottom: 4px; font-size: 11px; line-height: 16px; padding: 0 4px; }
+.xt-post.xt-compact .xt-progress, .xt-post.xt-compact .xt-progress-bg { height: 3px; }
+.xt-post.xt-compact .xt-body { display: flex; flex-direction: column; gap: 2px; padding-right: 22px; }
+.xt-post.xt-compact .xt-ctitle {
+  font: 600 14px/20px var(--xt-font);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.xt-post.xt-compact .xt-cmeta { font-size: 12px; line-height: 18px; color: var(--xt-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; min-width: 0; }
+.xt-post.xt-compact .xt-cmeta .xt-name { font-weight: 400; color: var(--xt-muted); }
+.xt-post.xt-compact .xt-cmeta .xt-name:hover { color: var(--xt-text); }
+.xt-post.xt-compact .xt-verified { width: 13px; height: 13px; }
+.xt-post.xt-compact .xt-more { position: absolute; top: 4px; right: 4px; margin: 0; width: 30px; height: 30px; opacity: 0; }
+.xt-post.xt-compact:hover .xt-more { opacity: 1; }
+.xt-post.xt-compact .xt-media img.ld { transform: none !important; }
+
+/* ============================================================ izleme sayfası: düzen */
+html.xt-on ytd-watch-flexy {
+  --ytd-watch-flexy-min-player-width: 320px !important;
+  --ytd-watch-flexy-sidebar-width: 402px !important;
+  --ytd-watch-flexy-sidebar-min-width: 320px !important;
+}
+html.xt-on ytd-watch-flexy #columns { padding-top: 16px; min-width: 0 !important; max-width: 100% !important; box-sizing: border-box; }
+html.xt-on ytd-watch-flexy #primary { min-width: 0 !important; }
+html.xt-on ytd-watch-flexy #player-container-outer { min-width: 0 !important; }
+html.xt-on ytd-watch-flexy #secondary { min-width: 320px !important; }
+html.xt-on ytd-watch-flexy:not([theater]):not([fullscreen]) #player-container-outer,
+html.xt-on ytd-watch-flexy:not([theater]):not([fullscreen]) #player-container-inner,
+html.xt-on ytd-watch-flexy:not([theater]):not([fullscreen]) #ytd-player,
+html.xt-on ytd-watch-flexy:not([theater]):not([fullscreen]) .html5-video-player { border-radius: 16px !important; overflow: hidden !important; }
+html.xt-on ytd-watch-flexy:not([theater]):not([fullscreen]) #player-container-outer { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 40px rgba(0, 0, 0, 0.45); }
+html.xt-on ytd-watch-flexy[theater] #full-bleed-container { max-height: calc(100vh - var(--xt-head-h) - 120px) !important; }
+
+html.xt-on ytd-watch-metadata { margin-top: 14px !important; }
+html.xt-on ytd-watch-metadata #title h1 { font: 700 20px/28px var(--xt-font) !important; letter-spacing: -0.01em; }
+html.xt-on ytd-watch-metadata #top-row { padding-bottom: 12px; border-bottom: 1px solid var(--xt-border); }
+html.xt-on ytd-watch-metadata #owner ytd-channel-name a { font-weight: 700 !important; }
+html.xt-on ytd-watch-metadata #description { border-radius: 16px !important; margin-top: 12px !important; transition: background 0.2s; }
+
+/* Yorumlar = yanıtlar */
+html.xt-on ytd-comments#comments { margin-top: 8px; }
+html.xt-on ytd-comments-header-renderer { margin: 16px 0 8px !important; }
+html.xt-on ytd-comments-header-renderer #count,
+html.xt-on ytd-comments-header-renderer h2 { font: 800 20px/24px var(--xt-font) !important; }
+html.xt-on ytd-comment-simplebox-renderer { padding-bottom: 12px; border-bottom: 1px solid var(--xt-border); }
+html.xt-on ytd-comment-thread-renderer {
+  margin: 0 !important;
+  padding: 14px 8px 6px !important;
+  border-bottom: 1px solid var(--xt-border);
+  transition: background 0.2s;
+}
+html.xt-on ytd-comment-thread-renderer:hover { background: var(--xt-soft); }
+html.xt-on ytd-comment-view-model #author-text,
+html.xt-on ytd-comment-view-model #author-text span { font-weight: 700 !important; font-size: 15px !important; color: var(--xt-text) !important; }
+html.xt-on ytd-comment-view-model #published-time-text a { font-size: 14px !important; }
+html.xt-on ytd-comment-view-model #content-text { font-size: 15px !important; line-height: 21px !important; }
+
+/* Sağ sütun = X yan paneli kutusu */
+html.xt-on ytd-watch-flexy #secondary-inner > #related {
+  border: 1px solid var(--xt-border);
+  border-radius: 16px;
+  padding: 4px 0 8px;
+  background: var(--xt-soft);
+}
+html.xt-on ytd-watch-flexy #secondary-inner > #related::before {
+  content: "Sıradaki";
+  display: block;
+  padding: 12px 16px 8px;
+  font: 800 20px/24px var(--xt-font);
+  color: var(--xt-text);
+}
+html.xt-on ytd-watch-flexy #related yt-related-chip-cloud-renderer,
+html.xt-on ytd-watch-flexy #related #chips-wrapper { padding: 0 12px 6px !important; margin: 0 !important; }
+html.xt-on ytd-watch-flexy #related ytd-item-section-renderer #contents > * { margin: 0 0 2px !important; }
+html.xt-on ytd-watch-flexy ytd-playlist-panel-renderer #container,
+html.xt-on ytd-watch-flexy #chat-container ytd-live-chat-frame { border-radius: 16px !important; overflow: hidden; border: 1px solid var(--xt-border) !important; }
+
+/* Oynatıcı: YouTube kırmızısı, sade */
+html.xt-on .ytp-play-progress,
+html.xt-on .ytp-swatch-background-color { background: var(--xt-red) !important; }
+
+/* ============================================================ kanal sayfası = profil */
+html.xt-on[xt-mode="narrow"] ytd-tabbed-page-header,
+html.xt-on[xt-mode="narrow"] #page-header-container,
+html.xt-on[xt-mode="narrow"] ytd-tabbed-page-header #page-header,
+html.xt-on[xt-mode="narrow"] yt-page-header-renderer {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+html.xt-on[xt-mode="narrow"] yt-page-header-view-model,
+html.xt-on[xt-mode="narrow"] .ytPageHeaderViewModelHost,
+html.xt-on[xt-mode="narrow"] .page-header-view-model-wiz { padding: 0 16px !important; margin: 0 !important; max-width: none !important; box-sizing: border-box; }
+html.xt-on[xt-mode="narrow"] ytd-tabbed-page-header tp-yt-app-toolbar,
+html.xt-on[xt-mode="narrow"] ytd-tabbed-page-header #tabs-inner-container { padding: 0 !important; max-width: none !important; width: 100% !important; }
+html.xt-on[xt-mode="narrow"] ytd-tabbed-page-header #tabs-container,
+html.xt-on[xt-mode="narrow"] ytd-tabbed-page-header yt-tab-group-shape { border-bottom: 1px solid var(--xt-border) !important; }
+html.xt-on .ytTabGroupShapeSlider,
+html.xt-on .yt-tab-group-shape-wiz__slider,
+html.xt-on tp-yt-paper-tabs #selectionBar { background: var(--xt-red) !important; border-color: var(--xt-red) !important; height: 3px !important; border-radius: 9999px !important; }
+html.xt-on[xt-mode="narrow"] ytd-browse[page-subtype="channels"] ytd-two-column-browse-results-renderer,
+html.xt-on[xt-mode="narrow"] ytd-browse[page-subtype="channels"] ytd-rich-grid-renderer { padding-top: 0 !important; }
+html.xt-on[xt-mode="narrow"] ytd-browse ytd-item-section-renderer ytd-shelf-renderer { padding: 0 16px !important; box-sizing: border-box; }
+html.xt-on[xt-mode="narrow"] ytd-browse ytd-section-list-renderer > #contents > ytd-item-section-renderer { border-bottom: 1px solid var(--xt-border); margin: 0 !important; padding: 8px 0 !important; }
+html.xt-on[xt-mode="narrow"] ytd-browse ytd-channel-video-player-renderer { padding: 12px 16px !important; box-sizing: border-box; }
+
+/* ============================================================ sağ panel */
+html.xt-on #xt-right {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--xt-off) + var(--xt-nav) + var(--xt-main) + var(--xt-gap));
+  width: var(--xt-right);
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: none;
+  z-index: 2000;
+  padding-bottom: 64px;
+  font: 400 15px/20px var(--xt-font);
+  color: var(--xt-text);
+}
+html.xt-on[xt-mode="narrow"] #xt-right { display: block; }
+@media (max-width: 1079px) { html.xt-on #xt-right { display: none !important; } }
+#xt-right .xt-right-sticky { position: sticky; top: 0; background: var(--xt-bg); padding: 6px 0 12px; z-index: 2; }
+#xt-right .xt-box { border: 1px solid var(--xt-border); border-radius: 16px; margin-bottom: 16px; overflow: hidden; background: var(--xt-soft); }
+#xt-right .xt-box[hidden] { display: none; }
+#xt-right .xt-box h2 { font: 800 20px/24px var(--xt-font); margin: 0; padding: 12px 16px; color: var(--xt-text); }
+.xt-on .xt-trend { display: block; padding: 12px 16px; color: var(--xt-text); text-decoration: none; transition: background 0.2s; }
+.xt-on .xt-trend:hover,
+html.xt-on .xt-follow:hover,
+#xt-right .xt-box-more:hover { background: var(--xt-soft); }
+.xt-on .xt-trend-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; line-height: 16px; color: var(--xt-muted); }
+.xt-on .xt-trend-meta .xt-ic { width: 18px; height: 18px; }
+.xt-on .xt-trend-name { font-weight: 700; margin: 2px 0; overflow-wrap: anywhere; }
+.xt-on .xt-trend-count { font-size: 13px; line-height: 16px; color: var(--xt-muted); }
+#xt-right .xt-follow { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--xt-text); text-decoration: none; transition: background 0.2s; }
+#xt-right .xt-follow-text { flex: 1; min-width: 0; }
+#xt-right .xt-follow-name { display: flex; align-items: center; font-weight: 700; min-width: 0; }
+#xt-right .xt-follow-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#xt-right .xt-follow-handle { color: var(--xt-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#xt-right .xt-sub { display: flex; align-items: center; gap: 12px; padding: 8px 16px; color: var(--xt-text); text-decoration: none; transition: background 0.2s; }
+#xt-right .xt-sub:hover { background: var(--xt-soft); }
+#xt-right .xt-sub .xt-avatar { flex-basis: 32px; width: 32px; height: 32px; }
+#xt-right .xt-sub .xt-letter { font-size: 14px; }
+#xt-right .xt-sub span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+#xt-right .xt-sub i { width: 6px; height: 6px; border-radius: 50%; background: var(--xt-link); flex: none; }
+#xt-right .xt-box-more { display: block; padding: 14px 16px; color: var(--xt-link); text-decoration: none; transition: background 0.2s; }
+#xt-right .xt-foot { display: flex; flex-wrap: wrap; gap: 2px 12px; padding: 0 16px; font-size: 13px; line-height: 16px; color: var(--xt-faint); }
+#xt-right .xt-foot a { color: inherit; text-decoration: none; }
+#xt-right .xt-foot a:hover { text-decoration: underline; }
+
+/* Keşfet */
+html.xt-on[xt-explore] ytd-page-manager#page-manager { display: none !important; }
+html.xt-on .xt-explore { display: block; font: 400 15px/20px var(--xt-font); color: var(--xt-text); padding-bottom: 50vh; animation: xt-in 0.3s var(--xt-ease) both; }
+.xt-explore .xt-section-title { font: 800 20px/24px var(--xt-font); margin: 0; padding: 12px 16px; border-top: 1px solid var(--xt-border); }
+.xt-explore .xt-section-title:first-child { border-top: 0; }
+.xt-explore .xt-empty { color: var(--xt-muted); padding: 0 16px 16px; margin: 0; }
+
+/* ============================================================ menü + bildirim */
+@keyframes xt-pop-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
+html.xt-on #xt-menu {
+  display: block;
+  position: fixed;
+  z-index: 3000;
+  min-width: 260px;
+  padding: 6px 0;
+  border-radius: 14px;
+  background: #212121;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  font-family: var(--xt-font);
+  animation: xt-pop-in 0.16s var(--xt-ease);
+}
+#xt-menu .xt-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 11px 16px;
+  border: 0;
+  background: none;
+  color: var(--xt-text);
+  font: 600 15px/20px var(--xt-font);
+  cursor: pointer;
+  text-align: left;
+}
+#xt-menu .xt-menu-item:hover { background: var(--xt-hover); }
+#xt-menu .xt-ic { width: 22px; height: 22px; }
+
+html.xt-on #xt-toast {
+  display: block;
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3001;
+  background: var(--xt-white);
+  color: #0f0f0f;
+  font: 600 14px/20px var(--xt-font);
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s, transform 0.25s var(--xt-ease);
+}
+html.xt-on #xt-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 700px) {
+  #xt-head .xt-back { margin-right: 8px; }
+  .xt-post .xt-actions { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.xt-on .xt-post.xt-enter, html.xt-on .xt-explore, html.xt-on #xt-menu { animation: none; }
+  html.xt-on #xt-nav { transition: none; }
+}
+.xt-avatar-anon { display: flex; align-items: center; justify-content: center; color: var(--xt-muted); }
+.xt-avatar-anon .xt-ic { width: 22px; height: 22px; }
+
+/* ============================================================ oynatma listesi + kanal başlığı düzeltmeleri */
+html.xt-on ytd-browse[page-subtype="playlist"] yt-page-header-renderer,
+html.xt-on ytd-browse[page-subtype="playlist"] ytd-playlist-header-renderer {
+  left: calc(var(--xt-off) + var(--xt-nav)) !important;
+  top: calc(var(--xt-head-h) + 12px) !important;
+}

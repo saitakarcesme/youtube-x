@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube X",
+  "short_name": "YouTube X",
+  "version": "2.0.0",
+  "description": "YouTube'u X düzeninde, YouTube renkleriyle gösterir: zaman akışı, gönderi kartları, X tarzı menü, reklamsız ve sade arayüz.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "YouTube X",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "css": ["content.css"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

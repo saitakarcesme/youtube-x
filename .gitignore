@@ -1,0 +1,6 @@
+# Chrome extension signing key. Anyone with this key can publish updates
+# under the same extension ID.
+*.pem
+
+# Packaged build. Load the youtube-x folder unpacked instead.
+*.crx
